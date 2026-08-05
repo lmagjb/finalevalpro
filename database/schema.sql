@@ -9,9 +9,6 @@ CREATE DATABASE IF NOT EXISTS evalpro
 
 USE evalpro;
 
--- ---------------------------------------------------------------------
--- Core accounts + role-based access
--- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS users (
   id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   full_name       VARCHAR(150)  NOT NULL,
@@ -24,9 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
                                 ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- ---------------------------------------------------------------------
--- Teacher-specific profile (1:1 with users where role = 'teacher')
--- ---------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS teacher_profiles (
   id                  INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id             INT UNSIGNED NOT NULL,
@@ -43,9 +38,7 @@ CREATE TABLE IF NOT EXISTS teacher_profiles (
   UNIQUE KEY uq_teacher_profiles_user (user_id)
 ) ENGINE=InnoDB;
 
--- ---------------------------------------------------------------------
--- Administrative Officer-specific profile (1:1 with users where role = 'admin_officer')
--- ---------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS admin_officer_profiles (
   id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   user_id       INT UNSIGNED NOT NULL,
@@ -59,9 +52,7 @@ CREATE TABLE IF NOT EXISTS admin_officer_profiles (
   UNIQUE KEY uq_ao_profiles_user (user_id)
 ) ENGINE=InnoDB;
 
--- ---------------------------------------------------------------------
--- Placeholder: promotion applications (fleshed out in a later dev phase)
--- ---------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS promotion_applications (
   id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   teacher_id    INT UNSIGNED NOT NULL,
@@ -80,9 +71,7 @@ CREATE TABLE IF NOT EXISTS promotion_applications (
     FOREIGN KEY (reviewed_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- ---------------------------------------------------------------------
--- Placeholder: uploaded Means of Verification (MOV) documents
--- ---------------------------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS documents (
   id              INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   application_id  INT UNSIGNED NOT NULL,
@@ -94,6 +83,6 @@ CREATE TABLE IF NOT EXISTS documents (
     FOREIGN KEY (application_id) REFERENCES promotion_applications(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Helpful indexes
+
 CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_promo_app_status ON promotion_applications(status);
