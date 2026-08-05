@@ -30,7 +30,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Middleware + home page will route by role once session exists.
     router.push("/");
     router.refresh();
   }
