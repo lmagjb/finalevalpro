@@ -18,9 +18,7 @@ export default async function AdminOfficerDashboard() {
           </h2>
           <p className="mt-2 text-sm text-slate">
             Submitted applications, document validation, and automated
-            COI/NCOI computation will appear here once that module is
-            built out. For now, this confirms role-based routing is
-            working: you're signed in as an{" "}
+            COI/NCOI computation will appear. You're signed in as an{" "}
             <span className="font-medium">admin officer</span>.
           </p>
         </div>

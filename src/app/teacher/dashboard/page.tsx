@@ -17,9 +17,7 @@ export default async function TeacherDashboard() {
             Promotion readiness
           </h2>
           <p className="mt-2 text-sm text-slate">
-            Your digital folder, COI/NCOI scoring, and application status
-            will appear here once the promotion module is built out. For
-            now, this confirms role-based routing is working: you're
+            Your digital folder, COI/NCOI scoring, and application status. You're
             signed in as a <span className="font-medium">teacher</span>.
           </p>
         </div>
