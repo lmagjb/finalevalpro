@@ -1,8 +1,3 @@
--- EVALPRO: A PPST-Based Teacher Promotion Readiness and Scoring System
--- Database schema (MySQL 8+)
--- Covers: user accounts/roles, teacher profiles, and placeholder tables for
--- promotion applications and document storage (built out in later phases).
-
 CREATE DATABASE IF NOT EXISTS evalpro
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
