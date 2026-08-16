@@ -1,224 +1,389 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EvalPro - Notifications</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        depedBlue: '#0033A0',
-                        depedBg: '#F9F9F9',
-                        textMuted: '#4B5563',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              depedBlue: "#0033A0",
+              depedBg: "#F9F9F9",
+              textMuted: "#4B5563",
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body { font-family: 'Inter', sans-serif; }
+      body {
+        font-family: "Inter", sans-serif;
+      }
     </style>
-</head>
-<body class="bg-depedBg min-h-screen flex flex-col">
-
+  </head>
+  <body class="bg-depedBg min-h-screen flex flex-col">
     <!-- nav baar -->
-    <nav class="bg-depedBlue h-20 flex items-center justify-between px-10 shadow-md flex-shrink-0">
-        <div class="flex items-center gap-4">
-            <!-- Back Button -->
-            <a href="teacher-dashboard.html" class="text-white hover:text-blue-100 transition-colors p-1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-            </a>
-            <div>
-                <h1 class="text-white text-3xl font-extrabold tracking-tight">EvalPro</h1>
-                <p class="text-blue-100 text-sm font-bold mt-[-4px]">Teacher Dashboard</p>
-            </div>
+    <nav
+      class="bg-depedBlue h-20 flex items-center justify-between px-10 shadow-md flex-shrink-0"
+    >
+      <div class="flex items-center gap-4">
+        <!-- Back Button -->
+        <a
+          href="teacher-dashboard.html"
+          class="text-white hover:text-blue-100 transition-colors p-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+        </a>
+        <div>
+          <h1 class="text-white text-3xl font-extrabold tracking-tight">
+            EvalPro
+          </h1>
+          <p class="text-blue-100 text-sm font-bold mt-[-4px]">
+            Teacher Dashboard
+          </p>
         </div>
-        
-        <div class="flex items-center gap-6">
-            <!-- notif bell wrapper -->
-            <div class="relative">
-                <button id="notification-btn" class="relative p-2 text-white hover:bg-blue-800 rounded-full transition-colors duration-200" aria-label="Notifications">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                    </svg>
-                    <span id="notification-badge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full">0</span>
-                </button>
+      </div>
 
-                <!-- notif drop ddown panel -->
-                <div id="notification-dropdown" class="hidden absolute right-0 mt-4 w-[400px] bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden">
-                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
-                        <h4 class="text-lg font-bold text-gray-900">Notifications</h4>
-                        <button id="close-dropdown-btn" class="text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close notifications">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                        </button>
-                    </div>
-                    <div class="px-6 py-8 text-center">
-                        <p class="text-sm text-textMuted">You're all caught up!</p>
-                    </div>
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-center">
-                        <a href="teacher-notifications.html" class="text-depedBlue font-semibold text-base hover:text-blue-800 transition-colors inline-flex items-center justify-center gap-2 group">
-                            View All Notifications
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
+      <div class="flex items-center gap-6">
+        <!-- notif bell wrapper -->
+        <div class="relative">
+          <button
+            id="notification-btn"
+            class="relative p-2 text-white hover:bg-blue-800 rounded-full transition-colors duration-200"
+            aria-label="Notifications"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+            <span
+              id="notification-badge"
+              class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full"
+              >0</span
+            >
+          </button>
 
-            <!-- profile icon to profile page -->
-            <a href="teacher-profile.html" class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm cursor-pointer hover:bg-gray-100 transition" aria-label="Go to Profile Settings">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          <!-- notif drop ddown panel -->
+          <div
+            id="notification-dropdown"
+            class="hidden absolute right-0 mt-4 w-[400px] bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden"
+          >
+            <div
+              class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50"
+            >
+              <h4 class="text-lg font-bold text-gray-900">Notifications</h4>
+              <button
+                id="close-dropdown-btn"
+                class="text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label="Close notifications"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
-            </a>
+              </button>
+            </div>
+            <div class="px-6 py-8 text-center">
+              <p class="text-sm text-textMuted">You're all caught up!</p>
+            </div>
+            <div
+              class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-center"
+            >
+              <a
+                href="teacher-notifications.html"
+                class="text-depedBlue font-semibold text-base hover:text-blue-800 transition-colors inline-flex items-center justify-center gap-2 group"
+              >
+                View All Notifications
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
         </div>
+
+        <!-- profile icon to profile page -->
+        <a
+          href="teacher-profile.html"
+          class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm cursor-pointer hover:bg-gray-100 transition"
+          aria-label="Go to Profile Settings"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-8 w-8 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+        </a>
+      </div>
     </nav>
 
     <!-- main content -->
     <main class="flex-1 max-w-[1200px] mx-auto w-full px-10 py-10">
-        
-        <!-- heaader -->
-        <header class="mb-8 flex justify-between items-center">
-            <div>
-                <h2 class="text-4xl font-bold text-gray-900">Notifications</h2>
-                <p class="text-xl text-textMuted font-semibold mt-2">Stay updated on your promotion application status.</p>
-            </div>
-            <div class="flex gap-3">
-                <!-- Mark All as Read Button (HIDDEN by default for clean UX) -->
-                <button id="mark-all-read-btn" onclick="markAllAsRead()" class="hidden px-6 py-3 bg-white border border-gray-300 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                    Mark All as Read
-                </button>
-            </div>
-        </header>
-
-        <!-- notif filter -->
-        <div class="flex gap-4 mb-8 border-b border-gray-200 pb-4">
-            <button onclick="filterNotifications('all')" class="filter-btn active px-6 py-2 rounded-lg font-semibold text-lg border-2 border-depedBlue bg-depedBlue text-white transition-colors">
-                All Notifications
-            </button>
-            <button onclick="filterNotifications('unread')" class="filter-btn px-6 py-2 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-                Unread
-            </button>
-            <button onclick="filterNotifications('stage')" class="filter-btn px-6 py-2 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-                Stage Updates
-            </button>
-            <button onclick="filterNotifications('returned')" class="filter-btn px-6 py-2 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
-                Returned Documents
-            </button>
+      <!-- heaader -->
+      <header class="mb-8 flex justify-between items-center">
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900">Notifications</h2>
+          <p class="text-xl text-textMuted font-semibold mt-2">
+            Stay updated on your promotion application status.
+          </p>
         </div>
-
-        
-        <div id="notif-empty-state" class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-16 text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-            <p class="text-2xl font-bold text-gray-500">You're all caught up!</p>
-            <p class="text-base text-textMuted mt-2">No new notifications at this time.</p>
+        <div class="flex gap-3">
+          <!-- Mark All as Read Button (HIDDEN by default for clean UX) -->
+          <button
+            id="mark-all-read-btn"
+            onclick="markAllAsRead()"
+            class="hidden px-6 py-3 bg-white border border-gray-300 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            Mark All as Read
+          </button>
         </div>
+      </header>
 
-        <div id="notifications-list" class="space-y-4 hidden">
-            
-           <!-- baackend code -->
+      <!-- notif filter -->
+      <div class="flex gap-4 mb-8 border-b border-gray-200 pb-4">
+        <button
+          onclick="filterNotifications('all')"
+          class="filter-btn active px-6 py-2 rounded-lg font-semibold text-lg border-2 border-depedBlue bg-depedBlue text-white transition-colors"
+        >
+          All Notifications
+        </button>
+        <button
+          onclick="filterNotifications('unread')"
+          class="filter-btn px-6 py-2 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Unread
+        </button>
+        <button
+          onclick="filterNotifications('stage')"
+          class="filter-btn px-6 py-2 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Stage Updates
+        </button>
+        <button
+          onclick="filterNotifications('returned')"
+          class="filter-btn px-6 py-2 rounded-lg font-semibold text-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Returned Documents
+        </button>
+      </div>
 
-        </div>
+      <div
+        id="notif-empty-state"
+        class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-16 text-center"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-20 w-20 text-gray-300 mx-auto mb-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+          />
+        </svg>
+        <p class="text-2xl font-bold text-gray-500">You're all caught up!</p>
+        <p class="text-base text-textMuted mt-2">
+          No new notifications at this time.
+        </p>
+      </div>
 
-        <!-- hiddden button (mark all, view all) -->
-        <div id="load-more-container" class="text-center mt-8 hidden">
-            <button class="px-8 py-3 bg-white border border-gray-300 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                Load Older Notifications
-            </button>
-        </div>
+      <div id="notifications-list" class="space-y-4 hidden">
+        <!-- baackend code -->
+      </div>
 
+      <!-- hiddden button (mark all, view all) -->
+      <div id="load-more-container" class="text-center mt-8 hidden">
+        <button
+          class="px-8 py-3 bg-white border border-gray-300 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors"
+        >
+          Load Older Notifications
+        </button>
+      </div>
     </main>
 
     <!-- javascript codes -->
     <script>
-        // notif drop down 
-        const notifBtn = document.getElementById('notification-btn');
-        const notifDropdown = document.getElementById('notification-dropdown');
-        const closeDropdownBtn = document.getElementById('close-dropdown-btn');
+      // notif drop down
+      const notifBtn = document.getElementById("notification-btn");
+      const notifDropdown = document.getElementById("notification-dropdown");
+      const closeDropdownBtn = document.getElementById("close-dropdown-btn");
 
-        if (notifBtn && notifDropdown) {
-            notifBtn.addEventListener('click', (e) => { e.stopPropagation(); notifDropdown.classList.toggle('hidden'); });
-            closeDropdownBtn.addEventListener('click', () => { notifDropdown.classList.add('hidden'); });
-            document.addEventListener('click', (e) => { if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) { notifDropdown.classList.add('hidden'); } });
-        }
+      if (notifBtn && notifDropdown) {
+        notifBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          notifDropdown.classList.toggle("hidden");
+        });
+        closeDropdownBtn.addEventListener("click", () => {
+          notifDropdown.classList.add("hidden");
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !notifDropdown.contains(e.target) &&
+            !notifBtn.contains(e.target)
+          ) {
+            notifDropdown.classList.add("hidden");
+          }
+        });
+      }
 
-        //filter notif
-        function filterNotifications(type) {
-            const notifications = document.querySelectorAll('.notification-item');
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            
-            // update active button
-            filterBtns.forEach(btn => {
-                btn.classList.remove('active', 'bg-depedBlue', 'text-white', 'border-depedBlue');
-                btn.classList.add('border-gray-300', 'text-gray-700');
-            });
-            event.target.classList.add('active', 'bg-depedBlue', 'text-white', 'border-depedBlue');
-            event.target.classList.remove('border-gray-300', 'text-gray-700');
-            
-            // filter logic
-            notifications.forEach(notif => {
-                if (type === 'all') {
-                    notif.style.display = 'block';
-                } else if (type === 'unread') {
-                    notif.style.display = notif.classList.contains('unread') ? 'block' : 'none';
-                } else if (type === 'stage') {
-                    notif.style.display = notif.getAttribute('data-type') === 'stage' ? 'block' : 'none';
-                } else if (type === 'returned') {
-                    notif.style.display = notif.getAttribute('data-type') === 'returned' ? 'block' : 'none';
-                }
-            });
-        }
+      //filter notif
+      function filterNotifications(type) {
+        const notifications = document.querySelectorAll(".notification-item");
+        const filterBtns = document.querySelectorAll(".filter-btn");
 
-        // mark all as read
-        function markAllAsRead() {
-            const unreadNotifications = document.querySelectorAll('.notification-item.unread');
-            unreadNotifications.forEach(notif => {
-                notif.classList.remove('unread', 'bg-white', 'border-depedBlue', 'border-red-500', 'border-yellow-500');
-                notif.classList.add('read', 'bg-gray-50', 'border-gray-300');
-                
-                const dot = notif.querySelector('.rounded-full');
-                dot.classList.remove('bg-depedBlue', 'bg-red-500', 'bg-yellow-500');
-                dot.classList.add('bg-gray-400');
-                
-                const title = notif.querySelector('h3');
-                title.classList.remove('text-gray-900');
-                title.classList.add('text-textMuted');
-            });
-            
-            // hide badge when mark as read
-            const badge = document.getElementById('notification-badge');
-            if(badge) badge.classList.add('hidden');
-            
-            const markAllBtn = document.getElementById('mark-all-read-btn');
-            if(markAllBtn) markAllBtn.classList.add('hidden');
-        }
+        // update active button
+        filterBtns.forEach((btn) => {
+          btn.classList.remove(
+            "active",
+            "bg-depedBlue",
+            "text-white",
+            "border-depedBlue",
+          );
+          btn.classList.add("border-gray-300", "text-gray-700");
+        });
+        event.target.classList.add(
+          "active",
+          "bg-depedBlue",
+          "text-white",
+          "border-depedBlue",
+        );
+        event.target.classList.remove("border-gray-300", "text-gray-700");
 
-        // click notif maark as read
-        document.getElementById('notifications-list').addEventListener('click', function(e) {
-            const notif = e.target.closest('.notification-item.unread');
-            if (notif) {
-                notif.classList.remove('unread', 'bg-white');
-                notif.classList.add('read', 'bg-gray-50');
-                
-                const dot = notif.querySelector('.rounded-full');
-                dot.classList.remove('bg-depedBlue', 'bg-red-500', 'bg-yellow-500');
-                dot.classList.add('bg-gray-400');
-                
-                const title = notif.querySelector('h3');
-                title.classList.remove('text-gray-900');
-                title.classList.add('text-textMuted');
-            }
+        // filter logic
+        notifications.forEach((notif) => {
+          if (type === "all") {
+            notif.style.display = "block";
+          } else if (type === "unread") {
+            notif.style.display = notif.classList.contains("unread")
+              ? "block"
+              : "none";
+          } else if (type === "stage") {
+            notif.style.display =
+              notif.getAttribute("data-type") === "stage" ? "block" : "none";
+          } else if (type === "returned") {
+            notif.style.display =
+              notif.getAttribute("data-type") === "returned" ? "block" : "none";
+          }
+        });
+      }
+
+      // mark all as read
+      function markAllAsRead() {
+        const unreadNotifications = document.querySelectorAll(
+          ".notification-item.unread",
+        );
+        unreadNotifications.forEach((notif) => {
+          notif.classList.remove(
+            "unread",
+            "bg-white",
+            "border-depedBlue",
+            "border-red-500",
+            "border-yellow-500",
+          );
+          notif.classList.add("read", "bg-gray-50", "border-gray-300");
+
+          const dot = notif.querySelector(".rounded-full");
+          dot.classList.remove("bg-depedBlue", "bg-red-500", "bg-yellow-500");
+          dot.classList.add("bg-gray-400");
+
+          const title = notif.querySelector("h3");
+          title.classList.remove("text-gray-900");
+          title.classList.add("text-textMuted");
+        });
+
+        // hide badge when mark as read
+        const badge = document.getElementById("notification-badge");
+        if (badge) badge.classList.add("hidden");
+
+        const markAllBtn = document.getElementById("mark-all-read-btn");
+        if (markAllBtn) markAllBtn.classList.add("hidden");
+      }
+
+      // click notif maark as read
+      document
+        .getElementById("notifications-list")
+        .addEventListener("click", function (e) {
+          const notif = e.target.closest(".notification-item.unread");
+          if (notif) {
+            notif.classList.remove("unread", "bg-white");
+            notif.classList.add("read", "bg-gray-50");
+
+            const dot = notif.querySelector(".rounded-full");
+            dot.classList.remove("bg-depedBlue", "bg-red-500", "bg-yellow-500");
+            dot.classList.add("bg-gray-400");
+
+            const title = notif.querySelector("h3");
+            title.classList.remove("text-gray-900");
+            title.classList.add("text-textMuted");
+          }
         });
     </script>
-</body>
+  </body>
 </html>
