@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EvalPro - Promotion Readiness</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        depedBlue: '#0033A0',
+                        depedBg: '#F9F9F9',
+                        textMuted: '#4B5563',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-depedBg min-h-screen flex flex-col">
+
+    <!-- header navigation bar -->
+    <nav class="bg-depedBlue h-20 flex items-center justify-between px-10 shadow-md flex-shrink-0">
+        <div class="flex items-center gap-4">
+            <!-- back button -->
+            <a href="teacher-dashboard.html" class="text-white hover:text-blue-100 transition-colors p-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </a>
+            <div>
+                <h1 class="text-white text-3xl font-extrabold tracking-tight">EvalPro</h1>
+                <p class="text-blue-100 text-sm font-bold mt-[-4px]">Teacher Dashboard</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-6">
+            <!-- notif bell wrapper -->
+            <div class="relative">
+                <button id="notification-btn" class="relative p-2 text-white hover:bg-blue-800 rounded-full transition-colors duration-200" aria-label="Notifications">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    <span id="notification-badge" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full">0</span>
+                </button>
+
+                <!-- dropdown button -->
+                <div id="notification-dropdown" class="hidden absolute right-0 mt-4 w-[400px] bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden">
+                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
+                        <h4 class="text-lg font-bold text-gray-900">Notifications</h4>
+                        <button id="close-dropdown-btn" class="text-gray-400 hover:text-gray-600 transition-colors" aria-label="Close notifications">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+                    <div class="text-center py-10">
+                        <p class="text-sm text-textMuted">You're all caught up!</p>
+                    </div>
+                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-center">
+                        <a href="teacher-notifications.html" class="text-depedBlue font-semibold text-base hover:text-blue-800 transition-colors inline-flex items-center justify-center gap-2 group">
+                            View All Notifications
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- profile dropdown wrapper -->
+            <div class="relative">
+                <button id="profile-btn" class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-100 transition" aria-label="Open Profile Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </button>
+
+                <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden">
+                    <a href="teacher-profile.html" class="flex items-center gap-3 px-5 py-3.5 text-gray-700 hover:bg-gray-50 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span class="font-semibold text-sm">Profile Settings</span>
+                    </a>
+                    <div class="border-t border-gray-100"></div>
+                    <a href="index.html" class="flex items-center gap-3 px-5 py-3.5 text-red-600 hover:bg-red-50 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        <span class="font-semibold text-sm">Sign Out</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- main content  -->
+    <main class="flex-1 max-w-[1400px] mx-auto w-full px-10 py-10">
+        
+        <!-- header -->
+        <header class="mb-10">
+            <h2 class="text-4xl font-bold text-gray-900">Promotion Readiness & Score</h2>
+            <p class="text-xl text-textMuted font-semibold mt-2">Auto-computed based on your uploaded MOVs and DepEd ECP Guidelines.</p>
+        </header>
+
+        <!-- recommendation box ai -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+            
+            <!-- reccomendation card from ai -->
+            <div class="lg:col-span-2 bg-gradient-to-br from-depedBlue to-blue-800 rounded-2xl shadow-lg p-8 text-white relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full -mr-16 -mt-16"></div>
+                
+                <div class="relative z-10 flex items-start gap-6">
+                    <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                    </div>
+                    <div>
+                        <p class="text-blue-100 text-lg font-semibold mb-1">AI Recommendation Engine</p>
+                        <!-- backend-->
+                        <h3 class="text-3xl font-extrabold mb-3">You are highly qualified for <span id="rec-position" class="underline decoration-yellow-400 decoration-4 underline-offset-4">--</span></h3>
+                        <p class="text-blue-100 text-lg leading-relaxed max-w-2xl">Based on your current computed score of <span id="rec-score">--</span> and your <span id="rec-years">--</span> of service, our analytics engine recommends applying for this position. You meet the PPST Domain requirements.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- all score card -->
+            <div class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8 flex flex-col items-center justify-center text-center">
+                <p class="text-lg text-textMuted font-semibold mb-2">Total Computed Score</p>
+                <div class="relative w-40 h-40 flex items-center justify-center mb-4">
+                    <!-- backend calculate (251.2 = 0%, 0 = 100%) -->
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" stroke="#E5E7EB" stroke-width="12" fill="none" />
+                        <circle id="score-circle" cx="50" cy="50" r="40" stroke="#0033A0" stroke-width="12" fill="none" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" />
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span id="total-score" class="text-5xl font-extrabold text-gray-900">--</span>
+                        <span class="text-xl text-textMuted font-medium">/ 100</span>
+                    </div>
+                </div>
+                <!-- backend based on eligibility-->
+                <span id="eligibility-badge" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold bg-gray-100 text-gray-800">
+                    <span class="w-2 h-2 rounded-full bg-gray-400"></span> <span id="eligibility-text">Pending Calculation</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- score breakdown and readiness-->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- score breakdown -->
+            <div class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-depedBlue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                    Score Breakdown
+                </h3>
+                
+                <div class="space-y-6">
+                    <!-- peformance -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-lg font-semibold text-gray-700">Performance (IPCRF)</span>
+                            <span class="text-lg font-bold text-gray-900"><span id="score-performance">--</span> / 30</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="bar-performance" class="bg-depedBlue h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- coi -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-lg font-semibold text-gray-700">Classroom Observable Indicators (COI)</span>
+                            <span class="text-lg font-bold text-gray-900"><span id="score-coi">--</span> / 25</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="bar-coi" class="bg-depedBlue h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!--ncoi-->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-lg font-semibold text-gray-700">Non-Classroom Observable Indicators (NCOI)</span>
+                            <span class="text-lg font-bold text-gray-900"><span id="score-ncoi">--</span> / 15</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="bar-ncoi" class="bg-yellow-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- education -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-lg font-semibold text-gray-700">Education (Master's Units)</span>
+                            <span class="text-lg font-bold text-gray-900"><span id="score-education">--</span> / 10</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="bar-education" class="bg-green-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- training -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-lg font-semibold text-gray-700">Training & Seminars</span>
+                            <span class="text-lg font-bold text-gray-900"><span id="score-training">--</span> / 10</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="bar-training" class="bg-depedBlue h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- exp -->
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-lg font-semibold text-gray-700">Years of Service</span>
+                            <span class="text-lg font-bold text-gray-900"><span id="score-experience">--</span> / 10</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="bar-experience" class="bg-red-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- readiness checklist -->
+            <div class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-depedBlue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                    Promotion Readiness Checklist
+                </h3>
+
+                <!-- design for empty staate -->
+                <div id="checklist-empty-state" class="text-center py-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    <p class="text-xl font-bold text-gray-500">No checklist data available.</p>
+                    <p class="text-base text-textMuted mt-2">Upload your MOVs to generate your readiness checklist.</p>
+                </div>
+
+                <!-- acitive state backend -->
+                <div id="checklist-container" class="space-y-4 hidden">
+                    
+                    <!-- backend code -->>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- javascript-->
+    <script>
+        // notif background logic
+        const notifBtn = document.getElementById('notification-btn');
+        const notifDropdown = document.getElementById('notification-dropdown');
+        const closeDropdownBtn = document.getElementById('close-dropdown-btn');
+
+        if (notifBtn && notifDropdown) {
+            notifBtn.addEventListener('click', (e) => { e.stopPropagation(); notifDropdown.classList.toggle('hidden'); });
+            closeDropdownBtn.addEventListener('click', () => { notifDropdown.classList.add('hidden'); });
+            document.addEventListener('click', (e) => {
+                if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) { notifDropdown.classList.add('hidden'); }
+            });
+        }
+
+        // profile dropdown logic
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+
+        if (profileBtn && profileDropdown) {
+            profileBtn.addEventListener('click', (e) => { e.stopPropagation(); profileDropdown.classList.toggle('hidden'); });
+            document.addEventListener('click', (e) => {
+                if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) { profileDropdown.classList.add('hidden'); }
+            });
+        }
+    </script>
+</body>
+</html>
