@@ -5,7 +5,16 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-type Role = "teacher" | "admin_officer";
+type Role = "teacher" | "principal" | "ao_ii" | "psds" | "hr_ao_iv" | "admin_officer";
+
+const ROLE_OPTIONS: { value: Role; label: string }[] = [
+  { value: "teacher", label: "Teacher" },
+  { value: "principal", label: "Principal" },
+  { value: "ao_ii", label: "AO II" },
+  { value: "psds", label: "PSDS" },
+  { value: "hr_ao_iv", label: "HR - AO IV" },
+  { value: "admin_officer", label: "AO (Evaluation)" },
+];
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -34,7 +43,6 @@ export default function RegisterPage() {
       return;
     }
 
-    // Auto sign-in right after registering.
     const result = await signIn("credentials", {
       email,
       password,
@@ -44,7 +52,6 @@ export default function RegisterPage() {
     setIsSubmitting(false);
 
     if (result?.error) {
-      // Account was created but sign-in failed; send them to login instead.
       router.push("/login");
       return;
     }
@@ -54,103 +61,112 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6">
-      <div className="w-full max-w-md rounded-lg border border-border bg-white p-8 shadow-sm">
-        <h1 className="text-xl font-semibold text-ink">Create an account</h1>
-        <p className="mt-1 text-sm text-slate">
-          Register as a teacher or as an administrative officer.
-        </p>
-
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-ink">
-              Full name
-            </label>
-            <input
-              type="text"
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-            />
+    <div className="bg-depedBg min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-[500px]">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-depedBlue rounded-2xl shadow-lg mb-4">
+            <span className="text-white text-4xl font-extrabold">E</span>
           </div>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            EvalPro
+          </h1>
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-ink">
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-            />
-          </div>
+        <div className="bg-white rounded-2xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.05)] border border-gray-100 p-10">
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-2">
+            Create an account
+          </h2>
+          <p className="text-base text-gray-500 mb-8">
+            Register with your DepEd role to get started.
+          </p>
 
-          <div>
-            <label className="block text-sm font-medium text-ink">
-              Password
-            </label>
-            <input
-              type="password"
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-            />
-            <p className="mt-1 text-xs text-slate">At least 8 characters.</p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-ink">
-              I am a
-            </label>
-            <div className="mt-1 grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setRole("teacher")}
-                className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
-                  role === "teacher"
-                    ? "border-teal bg-teal/10 text-teal"
-                    : "border-border text-slate"
-                }`}
-              >
-                Teacher
-              </button>
-              <button
-                type="button"
-                onClick={() => setRole("admin_officer")}
-                className={`rounded-md border px-3 py-2 text-sm font-medium transition ${
-                  role === "admin_officer"
-                    ? "border-teal bg-teal/10 text-teal"
-                    : "border-border text-slate"
-                }`}
-              >
-                Admin Officer
-              </button>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-lg font-semibold text-gray-700 mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                placeholder="Enter your full name"
+              />
             </div>
-          </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+            <div>
+              <label className="block text-lg font-semibold text-gray-700 mb-2">
+                Email Address
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                placeholder="Enter your email"
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full rounded-md bg-teal px-4 py-2 text-sm font-medium text-white transition hover:bg-teal/90 disabled:opacity-60"
-          >
-            {isSubmitting ? "Creating account…" : "Create account"}
-          </button>
-        </form>
+            <div>
+              <label className="block text-lg font-semibold text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                placeholder="At least 8 characters"
+              />
+            </div>
 
-        <p className="mt-4 text-center text-sm text-slate">
-          Already have an account?{" "}
-          <Link href="/login" className="font-medium text-teal">
-            Log in
-          </Link>
-        </p>
+            <div>
+              <label className="block text-lg font-semibold text-gray-700 mb-2">
+                I am a
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {ROLE_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setRole(opt.value)}
+                    className={`rounded-xl border px-3 py-3 text-base font-semibold transition ${
+                      role === opt.value
+                        ? "border-depedBlue bg-depedBlue/5 text-depedBlue"
+                        : "border-gray-300 text-gray-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {error && (
+              <p className="text-base font-semibold text-red-600">{error}</p>
+            )}
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-[60px] bg-depedBlue text-white text-xl font-extrabold rounded-xl hover:bg-blue-800 transition-colors shadow-md flex items-center justify-center mt-4 disabled:opacity-60"
+            >
+              {isSubmitting ? "Creating account…" : "Create account"}
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-base text-gray-500">
+            Already have an account?{" "}
+            <Link href="/login" className="font-semibold text-depedBlue hover:text-blue-800">
+              Log in
+            </Link>
+          </p>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

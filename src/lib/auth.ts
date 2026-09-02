@@ -1,7 +1,7 @@
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { findUserByEmail } from "@/lib/db";
+import { findUserByEmail, UserRole } from "@/lib/db";
 
 export const authOptions: AuthOptions = {
   session: {
@@ -47,7 +47,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
      async jwt({ token, user }) {
        if (user) {
-         token.role = (user as { role: "teacher" | "admin_officer" }).role;
+         token.role = (user as { role: UserRole }).role;
        }
        return token;
      },

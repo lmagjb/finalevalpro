@@ -23,7 +23,26 @@ if (process.env.NODE_ENV !== "production") {
   global._evalproPool = pool;
 }
 
-export type UserRole = "teacher" | "admin_officer";
+export type UserRole =
+  | "teacher"
+  | "admin_officer"
+  | "principal"
+  | "ao_ii"
+  | "psds"
+  | "hr_ao_iv"
+  | "hrmpsb"
+  | "sds";
+
+// Roles that currently have a real dashboard wired up (used to keep the
+// register form from offering a role with nowhere to land).
+export const REGISTERABLE_ROLES: UserRole[] = [
+  "teacher",
+  "principal",
+  "ao_ii",
+  "psds",
+  "hr_ao_iv",
+  "admin_officer",
+];
 
 export interface DbUser {
   id: number;
@@ -43,6 +62,15 @@ export async function findUserByEmail(email: string): Promise<DbUser | null> {
   return users[0] ?? null;
 }
 
+export async function findUserById(id: number): Promise<DbUser | null> {
+  const [rows] = await pool.query(
+    "SELECT id, full_name, email, password_hash, role, is_active FROM users WHERE id = ? LIMIT 1",
+    [id]
+  );
+  const users = rows as DbUser[];
+  return users[0] ?? null;
+}
+
 export async function createUser(params: {
   fullName: string;
   email: string;
@@ -56,4 +84,14 @@ export async function createUser(params: {
   );
   // @ts-expect-error mysql2 OkPacket typing
   return result.insertId as number;
+}
+
+export async function updateUserPasswordHash(
+  userId: number,
+  passwordHash: string
+): Promise<void> {
+  await pool.query("UPDATE users SET password_hash = ? WHERE id = ?", [
+    passwordHash,
+    userId,
+  ]);
 }

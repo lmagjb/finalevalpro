@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { createUser, findUserByEmail, UserRole } from "@/lib/db";
-
-const VALID_ROLES: UserRole[] = ["teacher", "admin_officer"];
+import { createUser, findUserByEmail, REGISTERABLE_ROLES, UserRole } from "@/lib/db";
+import { pool } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
@@ -12,7 +11,7 @@ export async function POST(request: Request) {
     const password = String(body.password ?? "");
     const role = body.role as UserRole;
 
-    if (!fullName || !email || !password || !VALID_ROLES.includes(role)) {
+    if (!fullName || !email || !password || !REGISTERABLE_ROLES.includes(role)) {
       return NextResponse.json(
         { error: "All fields are required and role must be valid." },
         { status: 400 }
@@ -36,6 +35,20 @@ export async function POST(request: Request) {
 
     const passwordHash = await bcrypt.hash(password, 10);
     const userId = await createUser({ fullName, email, passwordHash, role });
+
+    // Create the matching profile row so the dashboard has somewhere to
+    // read school/division/etc. from once the person fills it in.
+    if (role === "teacher") {
+      await pool.query(
+        `INSERT INTO teacher_profiles (user_id) VALUES (?)`,
+        [userId]
+      );
+    } else {
+      await pool.query(
+        `INSERT INTO staff_profiles (user_id) VALUES (?)`,
+        [userId]
+      );
+    }
 
     return NextResponse.json({ id: userId }, { status: 201 });
   } catch (err) {

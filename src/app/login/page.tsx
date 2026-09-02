@@ -35,58 +35,89 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6">
-      <div className="w-full max-w-md rounded-lg border border-border bg-white p-8 shadow-sm">
-        <h1 className="text-xl font-semibold text-ink">Log in</h1>
-        <p className="mt-1 text-sm text-slate">
-          Access your EVALPRO account.
-        </p>
-
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-ink">
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-            />
+    <div className="bg-depedBg min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-[500px]">
+        {/* header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-depedBlue rounded-2xl shadow-lg mb-4">
+            <span className="text-white text-4xl font-extrabold">E</span>
           </div>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            EvalPro
+          </h1>
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-ink">
-              Password
-            </label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full rounded-md border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal"
-            />
-          </div>
+        {/* login card design */}
+        <div className="bg-white rounded-2xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.05)] border border-gray-100 p-10">
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-8">Log in</h2>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-lg font-semibold text-gray-700 mb-2"
+              >
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900 placeholder-gray-400"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full rounded-md bg-teal px-4 py-2 text-sm font-medium text-white transition hover:bg-teal/90 disabled:opacity-60"
-          >
-            {isSubmitting ? "Logging in…" : "Log in"}
-          </button>
-        </form>
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-lg font-semibold text-gray-700 mb-2"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900 placeholder-gray-400"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
 
-        <p className="mt-4 text-center text-sm text-slate">
-          No account yet?{" "}
-          <Link href="/register" className="font-medium text-teal">
-            Register
-          </Link>
-        </p>
+            <div className="text-left -mt-2">
+              <a
+                href="#"
+                className="text-lg font-semibold text-depedBlue hover:text-blue-800 transition-colors"
+              >
+                Forgot password?
+              </a>
+            </div>
+
+            {error && (
+              <p className="text-base font-semibold text-red-600">{error}</p>
+            )}
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full h-[60px] bg-depedBlue text-white text-xl font-extrabold rounded-xl hover:bg-blue-800 transition-colors shadow-md flex items-center justify-center mt-8 disabled:opacity-60"
+            >
+              {isSubmitting ? "Logging in…" : "Login"}
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-base text-gray-500">
+            No account yet?{" "}
+            <Link href="/register" className="font-semibold text-depedBlue hover:text-blue-800">
+              Register
+            </Link>
+          </p>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

@@ -13,6 +13,11 @@ const config: Config = {
         teal: "#0E6E5C",
         paper: "#F6F4EF",
         border: "#D9D3C7",
+        // DepEd-themed palette used by the newer staff/teacher dashboard designs
+        depedBlue: "#0033A0",
+        depedBg: "#F9F9F9",
+        textMain: "#1F2937",
+        textMuted: "#4B5563",
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],

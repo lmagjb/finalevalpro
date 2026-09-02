@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EvalPro - Evaluation History</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              depedBlue: "#0033A0",
+              depedBg: "#F9F9F9",
+              textMuted: "#4B5563",
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body class="bg-depedBg min-h-screen flex flex-col">
+    <!-- top nav bar -->
+    <nav
+      class="bg-depedBlue h-20 flex items-center justify-between px-10 shadow-md flex-shrink-0"
+    >
+      <div class="flex items-center gap-4">
+        <a
+          href="principal-dashboard.html"
+          class="text-white hover:text-blue-100 transition-colors p-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+        </a>
+        <div>
+          <h1 class="text-white text-3xl font-extrabold tracking-tight">
+            EvalPro
+          </h1>
+          <p class="text-blue-100 text-sm font-bold mt-[-4px]">
+            Principal Dashboard
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-6">
+        <!-- notif bell -->
+        <div class="relative">
+          <button
+            id="notification-btn"
+            class="relative p-2 text-white hover:bg-blue-800 rounded-full transition-colors duration-200"
+            aria-label="Notifications"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+            <span
+              id="notification-badge"
+              class="hidden absolute top-0 right-0 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full"
+              >0</span
+            >
+          </button>
+          <div
+            id="notification-dropdown"
+            class="hidden absolute right-0 mt-4 w-[400px] bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden"
+          >
+            <div
+              class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50"
+            >
+              <h4 class="text-lg font-bold text-gray-900">Notifications</h4>
+              <button
+                id="close-dropdown-btn"
+                class="text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label="Close notifications"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div id="notif-list" class="max-h-[400px] overflow-y-auto">
+              <div id="notif-empty" class="text-center py-10">
+                <p class="text-sm text-textMuted">You're all caught up!</p>
+              </div>
+            </div>
+            <div
+              class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-center"
+            >
+              <a
+                href="principal-notifications.html"
+                class="text-depedBlue font-semibold text-base hover:text-blue-800 transition-colors inline-flex items-center justify-center gap-2 group"
+                >View All Notifications<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 5l7 7-7 7"
+                  /></svg
+              ></a>
+            </div>
+          </div>
+        </div>
+        <!-- profile dropdown -->
+        <div class="relative">
+          <button
+            id="profile-btn"
+            class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-100 transition"
+            aria-label="Open Profile Menu"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </button>
+          <div
+            id="profile-dropdown"
+            class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden"
+          >
+            <a
+              href="principal-profile.html"
+              class="flex items-center gap-3 px-5 py-3.5 text-gray-700 hover:bg-gray-50 transition-colors"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                /></svg
+              ><span class="font-semibold text-sm">Profile Settings</span></a
+            >
+            <div class="border-t border-gray-100"></div>
+            <form action="/api/auth/logout" method="POST">
+              <button
+                type="submit"
+                class="w-full flex items-center gap-3 px-5 py-3.5 text-red-600 hover:bg-red-50 transition-colors text-left"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  /></svg
+                ><span class="font-semibold text-sm">Sign Out</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- main content -->
+    <main class="flex-1 max-w-[1400px] mx-auto w-full px-10 py-10">
+      <!-- page header -->
+      <header class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-900">Evaluation History</h2>
+        <p class="text-lg text-textMuted font-semibold mt-1">
+          View past evaluations and initiate Reclassification Forms (RFTP) for
+          endorsed teachers.
+        </p>
+      </header>
+
+      <!-- search and fileter bar -->
+      <div class="flex flex-col md:flex-row gap-4 mb-6">
+        <div class="relative flex-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+          <input
+            id="history-search"
+            type="text"
+            placeholder="Search teacher name..."
+            class="w-full h-[50px] pl-12 pr-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900 bg-white shadow-sm"
+          />
+        </div>
+
+        <div class="relative min-w-[200px]">
+          <select
+            id="history-filter"
+            class="w-full h-[50px] px-5 pr-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900 bg-white shadow-sm cursor-pointer appearance-none"
+          >
+            <option value="all">All Statuses</option>
+            <option value="endorsed">Endorsed</option>
+            <option value="returned">Returned</option>
+          </select>
+
+          <svg
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 pointer-events-none"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- history table -->
+      <div
+        class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 overflow-hidden"
+      >
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-100">
+              <th
+                class="p-5 text-sm font-bold text-textMuted uppercase tracking-wider"
+              >
+                Teacher Name
+              </th>
+              <th
+                class="p-5 text-sm font-bold text-textMuted uppercase tracking-wider"
+              >
+                Position Applied
+              </th>
+              <th
+                class="p-5 text-sm font-bold text-textMuted uppercase tracking-wider"
+              >
+                Date Evaluated
+              </th>
+              <th
+                class="p-5 text-sm font-bold text-textMuted uppercase tracking-wider"
+              >
+                Final Score
+              </th>
+              <th
+                class="p-5 text-sm font-bold text-textMuted uppercase tracking-wider"
+              >
+                Status
+              </th>
+              <th
+                class="p-5 text-sm font-bold text-textMuted uppercase tracking-wider text-right"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body" class="divide-y divide-gray-100">
+            <!-- loading state -->
+            <tr id="history-loading">
+              <td colspan="6" class="p-8 text-center text-textMuted">
+                <div
+                  class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-depedBlue mr-2"
+                ></div>
+                Loading evaluation history...
+              </td>
+            </tr>
+
+            <!-- empty state -->
+            <tr id="history-empty" class="hidden">
+              <td colspan="6" class="p-8 text-center text-textMuted">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-12 w-12 mx-auto text-gray-300 mb-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                No evaluation history found for the selected filters.
+              </td>
+            </tr>
+
+            <!-- backend-->
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- RFTP initiation modal -->
+    <div
+      id="rftp-modal"
+      class="hidden fixed w-full h-full top-0 left-0 items-center justify-center z-50"
+    >
+      <div
+        class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"
+        onclick="closeRFTPModal()"
+      ></div>
+      <div
+        class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-2xl shadow-2xl z-50 overflow-y-auto relative"
+      >
+        <!-- backend -->
+        <form
+          id="rftp-form"
+          action="/api/principal/initiate-rftp"
+          method="POST"
+          class="modal-content py-6 text-left px-8"
+        >
+          <input
+            type="hidden"
+            name="teacher_id"
+            id="rftp-teacher-id"
+            value=""
+          />
+
+          <div
+            class="flex justify-between items-center pb-4 border-b border-gray-100"
+          >
+            <h3 class="text-2xl font-bold text-gray-900">Initiate RFTP</h3>
+            <button
+              type="button"
+              onclick="closeRFTPModal()"
+              class="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="py-6">
+            <p class="text-lg text-textMuted mb-4">
+              Are you sure you want to generate and submit the
+              <span class="font-bold text-depedBlue"
+                >Reclassification Form for Teacher Positions (RFTP)</span
+              >
+              for
+              <span id="rftp-teacher-name" class="font-bold text-gray-900"
+                >--</span
+              >?
+            </p>
+            <p class="text-sm text-textMuted">
+              This action will formally recommend the teacher to the Division
+              Office for reclassification.
+            </p>
+          </div>
+
+          <!-- error container -->
+          <div
+            id="rftp-error"
+            class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm mb-4"
+          >
+            <!-- error messaage injection here -->
+          </div>
+
+          <div class="flex justify-end gap-4 pt-4 border-t border-gray-100">
+            <button
+              type="button"
+              onclick="closeRFTPModal()"
+              class="px-6 py-2 bg-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-300 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="px-6 py-2 bg-depedBlue text-white rounded-xl font-semibold hover:bg-blue-800 transition-colors shadow-md flex items-center gap-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              Generate & Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- javascript -->
+    <script>
+      const notifBtn = document.getElementById("notification-btn");
+      const notifDropdown = document.getElementById("notification-dropdown");
+      const closeDropdownBtn = document.getElementById("close-dropdown-btn");
+      if (notifBtn && notifDropdown) {
+        notifBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          notifDropdown.classList.toggle("hidden");
+        });
+        closeDropdownBtn.addEventListener("click", () => {
+          notifDropdown.classList.add("hidden");
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !notifDropdown.contains(e.target) &&
+            !notifBtn.contains(e.target)
+          ) {
+            notifDropdown.classList.add("hidden");
+          }
+        });
+      }
+
+      const profileBtn = document.getElementById("profile-btn");
+      const profileDropdown = document.getElementById("profile-dropdown");
+      if (profileBtn && profileDropdown) {
+        profileBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          profileDropdown.classList.toggle("hidden");
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !profileDropdown.contains(e.target) &&
+            !profileBtn.contains(e.target)
+          ) {
+            profileDropdown.classList.add("hidden");
+          }
+        });
+      }
+
+      // RFTP modal logic
+      const rftpModal = document.getElementById("rftp-modal");
+      const rftpTeacherName = document.getElementById("rftp-teacher-name");
+      const rftpTeacherId = document.getElementById("rftp-teacher-id");
+
+      function openRFTPModal(teacherId, teacherName) {
+        rftpTeacherId.value = teacherId;
+        rftpTeacherName.textContent = teacherName;
+        rftpModal.classList.remove("hidden");
+      }
+
+      function closeRFTPModal() {
+        rftpModal.classList.add("hidden");
+        // clear any previous error messages
+        const errorDiv = document.getElementById("rftp-error");
+        if (errorDiv) errorDiv.classList.add("hidden");
+      }
+
+      // backend
+    </script>
+  </body>
+</html>

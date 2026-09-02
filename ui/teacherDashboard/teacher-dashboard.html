@@ -1,653 +1,179 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EvalPro - Teacher Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              depedBlue: "#0033A0",
-              depedBg: "#F9F9F9",
-              textMain: "#1F2937",
-              textMuted: "#4B5563",
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        depedBlue: "#0033A0",
+                        depedBg: "#F9F9F9",
+                        textMuted: "#4B5563",
+                    },
+                },
             },
-            fontFamily: {
-              sans: ["Inter", "sans-serif"],
-            },
-          },
-        },
-      };
+        };
     </script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-      body {
-        font-family: "Inter", sans-serif;
-      }
-      .modal {
-        transition: opacity 0.25s ease;
-      }
-      body.modal-active {
-        overflow: hidden;
-      }
+        body { font-family: 'Inter', sans-serif; }
+        .hidden { display: none !important; }
     </style>
-  </head>
-  <body class="bg-depedBg min-h-screen">
-    <!-- header nav bar  -->
-    <nav
-      class="bg-depedBlue h-20 flex items-center justify-between px-10 shadow-md"
-    >
-      <div>
-        <h1 class="text-white text-3xl font-extrabold tracking-tight">
-          EvalPro
-        </h1>
-        <p class="text-blue-100 text-sm font-bold mt-[-4px]">
-          Teacher Dashboard
-        </p>
-      </div>
+</head>
+<body class="bg-gray-50 min-h-screen">
 
-      <div class="flex items-center gap-6">
-        <!-- notif bell wrapper -->
-        <div class="relative">
-          <button
-            id="notification-btn"
-            class="relative p-2 text-white hover:bg-blue-800 rounded-full transition-colors duration-200"
-            aria-label="Notifications"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-7 w-7"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
-            </svg>
-            <span
-              id="notification-badge"
-              class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full"
-              >0</span
-            >
-          </button>
-
-          <!-- notif drop down design -->
-          <div
-            id="notification-dropdown"
-            class="hidden absolute right-0 mt-4 w-[400px] bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden"
-          >
-            <div
-              class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50"
-            >
-              <h4 class="text-lg font-bold text-gray-900">Notifications</h4>
-              <div class="flex items-center gap-3">
-                <button
-                  id="mark-read-btn"
-                  class="text-sm font-semibold text-depedBlue hover:text-blue-800 transition-colors"
-                >
-                  Mark all as read
-                </button>
-                <button
-                  id="close-dropdown-btn"
-                  class="text-gray-400 hover:text-gray-600 transition-colors"
-                  aria-label="Close notifications"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
+  
+    <nav class="bg-depedBlue text-white p-4 shadow-sm">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold">EvalPro</h1>
+                <p class="text-xs text-blue-200">Teacher Dashboard</p>
             </div>
-
-            <!-- dropdown design when empty -->
-            <div id="dropdown-notif-empty-state" class="text-center py-10">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-12 w-12 text-gray-300 mx-auto mb-3"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
-              <p class="text-base font-bold text-gray-500">
-                You're all caught up!
-              </p>
-              <p class="text-sm text-textMuted mt-1">No new notifications.</p>
-            </div>
-
-            <!-- dropdown when it has active or notifs -->
-            <div
-              id="dropdown-notif-list"
-              class="max-h-[400px] overflow-y-auto hidden"
-            >
-              
-            </div>
-
-            <div
-              class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-center"
-            >
-              <a
-                href="teacher-notifications.html"
-                class="text-depedBlue font-semibold text-base hover:text-blue-800 transition-colors inline-flex items-center justify-center gap-2 group"
-              >
-                View All Notifications
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4 group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- profile dropdown wrapper -->
-        <div class="relative">
-            <!-- profile icon (sign out, profile settings) -->
-            <button id="profile-btn" class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-100 transition" aria-label="Open Profile Menu">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-            </button>
-
-            <!-- profile dropdown menu -->
-            <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden">
-                    
-                <!-- Pprofile settings link-->
-                <a href="teacher-profile.html" class="flex items-center gap-3 px-5 py-3.5 text-gray-700 hover:bg-gray-50 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span class="font-semibold text-sm">Profile Settings</span>
-                </a>
-
-                <!-- divider design -->
-                <div class="border-t border-gray-100"></div>
-
-                <!-- sign out link -->
-                <a href="index.html" class="flex items-center gap-3 px-5 py-3.5 text-red-600 hover:bg-red-50 transition-colors">
+            
+        
+            <div class="flex items-center gap-6">
+                <a href="teacher-notifications.html" class="flex items-center gap-2 text-sm hover:text-blue-200 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                     </svg>
-                    <span class="font-semibold text-sm">Sign Out</span>
+                    Notifications
                 </a>
+                
+                <a href="teacher-profile.html" class="flex items-center gap-2 text-sm hover:text-blue-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Profile
+                </a>
+                
+                <form action="/api/auth/logout" method="POST" class="inline">
+                    <button type="submit" class="flex items-center gap-2 text-sm hover:text-red-300 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Logout
+                    </button>
+                </form>
             </div>
         </div>
     </nav>
 
-    <!-- main container -->
-    <main class="max-w-[1400px] mx-auto px-10 py-10">
-      <!-- welcome, name, position, school -->
-      <header class="mb-10">
-        <h2 class="text-4xl font-bold text-gray-900">
-          Welcome, <span id="display-name" class="text-depedBlue">--</span>!
-        </h2>
-        <p class="text-xl text-textMuted font-semibold mt-2">
-          Position: <span id="display-position">--</span>
-          <span class="mx-2 text-gray-300">|</span>
-          School: <span id="display-school">--</span>
-        </p>
-      </header>
 
-      <!-- promotion step status -->
-      <section class="mb-12">
-        <h3 class="text-3xl font-bold text-gray-900 mb-6">
-          Your Promotion Status:
-        </h3>
+    <div class="max-w-6xl mx-auto p-6">
+        
 
-        <div
-          class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-10"
-        >
-          <!-- deisgned for teachers that have no active promotions yet -->
-          <div id="stepper-empty-state" class="text-center py-8">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-16 w-16 text-gray-300 mx-auto mb-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="1"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            <p class="text-xl font-bold text-gray-500">
-              No active promotion application.
-            </p>
-            <p class="text-base text-textMuted mt-2">
-              Submit your application to see your status tracker here.
-            </p>
-          </div>
-
-          <!-- designed for when there is an active application, shows the steps and where the application is -->
-          <div
-            id="stepper-active-state"
-            class="hidden relative flex justify-between items-start"
-          >
-            <div
-              class="absolute top-6 left-10 right-10 h-1.5 bg-gray-200 -z-10"
-            ></div>
-            <div
-              class="absolute top-6 left-10 w-[calc(16.66%-40px)] h-1.5 bg-depedBlue -z-10"
-            ></div>
-
-            <div class="flex flex-col items-center w-1/6">
-              <div
-                id="step-principal"
-                class="w-12 h-12 rounded-full bg-depedBlue flex items-center justify-center shadow-md"
-              >
-                <span class="text-white font-bold text-lg">1</span>
-              </div>
-              <span class="mt-4 text-xl font-bold text-gray-900 text-center"
-                >Principal</span
-              >
+        <div id="welcome-container" class="bg-white border border-gray-300 rounded-md p-6 mb-6">
+ 
+            <div id="welcome-loading" class="hidden animate-pulse">
+                <div class="h-8 bg-gray-200 rounded w-1/3 mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-1/2"></div>
             </div>
-            <div class="flex flex-col items-center w-1/6">
-              <div
-                id="step-ao2"
-                class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center"
-              ></div>
-              <span class="mt-4 text-xl font-bold text-gray-900 text-center"
-                >AO II</span
-              >
+            
+      
+            <div id="welcome-content">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome, <span id="display-name" class="text-depedBlue">Teacher Name</span>!</h2>
+                <p class="text-gray-600">Position: <span id="display-position" class="font-medium text-gray-900">Teacher I</span> | School: <span id="display-school" class="font-medium text-gray-900">Sample Elementary School</span></p>
             </div>
-            <div class="flex flex-col items-center w-1/6">
-              <div
-                id="step-psds"
-                class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center"
-              ></div>
-              <span class="mt-4 text-xl font-bold text-gray-900 text-center"
-                >PSDS</span
-              >
-            </div>
-            <div class="flex flex-col items-center w-1/6">
-              <div
-                id="step-hr"
-                class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center"
-              ></div>
-              <span class="mt-4 text-xl font-bold text-gray-900 text-center"
-                >HR</span
-              >
-            </div>
-            <div class="flex flex-col items-center w-1/6">
-              <div
-                id="step-hrmpsb"
-                class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center"
-              ></div>
-              <span class="mt-4 text-xl font-bold text-gray-900 text-center"
-                >HRMPSB</span
-              >
-            </div>
-            <div class="flex flex-col items-center w-1/6">
-              <div
-                id="step-sds"
-                class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center"
-              ></div>
-              <span class="mt-4 text-xl font-bold text-gray-900 text-center"
-                >SDS</span
-              >
-            </div>
-          </div>
         </div>
-      </section>
-
-      <!-- quick actions button, (My movs, coi, ncoi, readiness checker) -->
-      <section class="mb-12">
-        <h3 class="text-3xl font-bold text-gray-900 mb-6">Quick Actions</h3>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <a
-            href="teacher-folder.html"
-            id="btn-movs"
-            class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8 flex flex-col items-center justify-between h-80 cursor-pointer hover:shadow-lg hover:border-depedBlue/30 transition-all duration-200 group"
-          >
-            <div class="mt-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-24 w-24 text-depedBlue"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                />
-              </svg>
-            </div>
-            <h4 class="text-2xl font-bold text-gray-900 text-center">
-              My MOVs
-            </h4>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-10 w-10 text-depedBlue mt-auto group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </a>
-
-          <div
-            id="btn-score"
-            class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8 flex flex-col items-center justify-between h-80 cursor-pointer hover:shadow-lg hover:border-depedBlue/30 transition-all duration-200 group"
-          >
-            <div class="mt-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-24 w-24 text-depedBlue"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-            </div>
-            <div class="text-center">
-              <h4 class="text-2xl font-bold text-gray-900">COI/NCOI Score</h4>
-              <p class="text-xl text-textMuted font-medium mt-2">
-                <span id="display-score">--</span> / 100
-              </p>
-            </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-10 w-10 text-depedBlue mt-auto group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </div>
-
-          <a
-            href="teacher-readiness.html"
-            id="btn-readiness"
-            class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8 flex flex-col items-center justify-between h-80 cursor-pointer hover:shadow-lg hover:border-depedBlue/30 transition-all duration-200 group"
-          >
-            <div class="mt-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-24 w-24 text-depedBlue"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
-            <h4 class="text-2xl font-bold text-gray-900 text-center">
-              Promotion Readiness<br />Checker
-            </h4>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-10 w-10 text-depedBlue mt-auto group-hover:translate-x-1 transition-transform"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </a>
-        </div>
-      </section>
-
-      <!-- ease of access of recent notifications, bottom -->
-      <section class="mb-12">
-        <h3 class="text-3xl font-bold text-gray-900 mb-6">
-          Recent Notifications
-        </h3>
-
-        <div
-          class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8"
-        >
-          <!-- this design is for when its empty -->
-          <div id="notif-empty-state" class="text-center py-10">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-16 w-16 text-gray-300 mx-auto mb-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="1"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-              />
-            </svg>
-            <p class="text-xl font-bold text-gray-500">You're all caught up!</p>
-            <p class="text-base text-textMuted mt-2">
-              No new notifications at this time.
-            </p>
-          </div>
-
-          <!-- when only there is notifs -->
-          <div id="notif-list-container" class="hidden">
-            <!-- backend code here?  -->
-          </div>
-
-          <!-- footer link -->
-          <div class="mt-6 text-center border-t border-gray-100 pt-6">
-            <a
-              href="teacher-notifications.html"
-              class="text-depedBlue font-semibold text-lg hover:text-blue-800 transition-colors inline-flex items-center justify-center gap-2 group"
-            >
-              View All Notifications
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- handles the pop up window -->
-    <div
-      id="action-modal"
-      class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50"
-    >
-      <div
-        class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"
-      ></div>
-      <div
-        class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-2xl shadow-2xl z-50 overflow-y-auto"
-      >
-        <div class="modal-content py-4 text-left px-6">
-          <div class="flex justify-between items-center pb-3">
-            <p id="modal-title" class="text-2xl font-bold text-gray-900">
-              Title
-            </p>
-            <div class="modal-close cursor-pointer z-50" id="close-modal-btn">
-              <svg
-                class="fill-current text-gray-500 hover:text-gray-800"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 18 18"
-              >
-                <path
-                  d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
-                ></path>
-              </svg>
-            </div>
-          </div>
-          <p id="modal-body" class="text-lg text-textMuted mb-4">
-            Body text goes here.
-          </p>
-          <div class="flex justify-end pt-2">
-            <button
-              id="modal-ok-btn"
-              class="px-6 py-3 bg-depedBlue text-white rounded-xl font-semibold text-lg hover:bg-blue-800 transition-colors shadow-md"
-            >
-              Okay
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- javascripts -->
-    <script>
-      // dropdown logic
-      const notifBtn = document.getElementById("notification-btn");
-      const notifDropdown = document.getElementById("notification-dropdown");
-      const closeDropdownBtn = document.getElementById("close-dropdown-btn");
-      const markReadBtn = document.getElementById("mark-read-btn");
-      const badge = document.getElementById("notification-badge");
-      const unreadDots = document.querySelectorAll(".unread-dot");
-      const notifItems = document.querySelectorAll(".notification-item");
-      const profileBtn = document.getElementById('profile-btn');
-      const profileDropdown = document.getElementById('profile-dropdown');
-
-        if (profileBtn && profileDropdown) {
-            // Toggle dropdown
-            profileBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('hidden');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
-                    profileDropdown.classList.add('hidden');
-                }
-            });
-        }
-
-      notifBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        notifDropdown.classList.toggle("hidden");
-      });
-
-      closeDropdownBtn.addEventListener("click", () => {
-        notifDropdown.classList.add("hidden");
-      });
-
-      document.addEventListener("click", (e) => {
-        if (!notifDropdown.contains(e.target) && !notifBtn.contains(e.target)) {
-          notifDropdown.classList.add("hidden");
-        }
-      });
-
-      markReadBtn.addEventListener("click", () => {
-        badge.classList.add("hidden");
-        unreadDots.forEach((dot) => {
-          dot.classList.remove("bg-depedBlue");
-          dot.classList.add("bg-gray-300");
-        });
-        notifItems.forEach((item) => {
-          item.classList.remove("bg-blue-50", "hover:bg-blue-100");
-          item.classList.add("hover:bg-gray-50");
-        });
-      });
-
-      // reusable popup, success messages and error messages and confirm prompts, and sign out
-      const modal = document.getElementById("action-modal");
-      const modalTitle = document.getElementById("modal-title");
-      const modalBody = document.getElementById("modal-body");
-      const closeModalBtn = document.getElementById("close-modal-btn");
-      const modalOkBtn = document.getElementById("modal-ok-btn");
-
-      function openModal(title, body) {
-        modalTitle.textContent = title;
-        modalBody.textContent = body;
-        modal.classList.remove("opacity-0", "pointer-events-none");
-        document.body.classList.add("modal-active");
-      }
-
-      function closeModal() {
-        modal.classList.add("opacity-0", "pointer-events-none");
-        document.body.classList.remove("modal-active");
-      }
 
       
-      closeModalBtn.addEventListener("click", closeModal);
-      modalOkBtn.addEventListener("click", closeModal);
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeModal();
-      });
+        <div class="bg-white border border-gray-300 rounded-md p-6 mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Your Promotion Status</h3>
+            
+         
+            <div class="flex items-center justify-between mb-4" id="promotion-stepper">
+                <div class="flex-1 text-center" id="step-1">
+                    <div class="w-8 h-8 bg-depedBlue text-white rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">1</div>
+                    <p class="text-sm font-medium">Principal</p>
+                </div>
+                <div class="flex-1 h-1 bg-gray-300"></div>
+                <div class="flex-1 text-center" id="step-2">
+                    <div class="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">2</div>
+                    <p class="text-sm font-medium">AO II</p>
+                </div>
+                <div class="flex-1 h-1 bg-gray-300"></div>
+                <div class="flex-1 text-center" id="step-3">
+                    <div class="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">3</div>
+                    <p class="text-sm font-medium">PSDS</p>
+                </div>
+                <div class="flex-1 h-1 bg-gray-300"></div>
+                <div class="flex-1 text-center" id="step-4">
+                    <div class="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">4</div>
+                    <p class="text-sm font-medium">HR</p>
+                </div>
+                <div class="flex-1 h-1 bg-gray-300"></div>
+                <div class="flex-1 text-center" id="step-5">
+                    <div class="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-bold">5</div>
+                    <p class="text-sm font-medium">SDS</p>
+                </div>
+            </div>
+            
+            <div class="text-center p-4 bg-gray-50 border border-gray-200 rounded-md">
+                <p class="text-gray-700 font-medium">Current Status: <span id="current-status-text" class="text-depedBlue font-bold">Under Principal Review</span></p>
+            </div>
+        </div>
+
+   
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <a href="teacher-folder.html" class="bg-white border border-gray-300 rounded-md p-6 hover:border-depedBlue transition-colors group">
+                <h4 class="font-bold text-gray-900 mb-2 group-hover:text-depedBlue transition-colors">My MOVs</h4>
+                <p class="text-sm text-gray-600">Upload and manage your Means of Verification</p>
+            </a>
+            
+            <a href="teacherQS.html" class="bg-white border border-gray-300 rounded-md p-6 hover:border-depedBlue transition-colors group">
+                <h4 class="font-bold text-gray-900 mb-2 group-hover:text-depedBlue transition-colors">Qualification Standards</h4>
+                <p class="text-sm text-gray-600">Document your education, experience, and training</p>
+            </a>
+            
+            <a href="teacherNCOI.html" class="bg-white border border-gray-300 rounded-md p-6 hover:border-depedBlue transition-colors group">
+                <h4 class="font-bold text-gray-900 mb-2 group-hover:text-depedBlue transition-colors">NCOI Evaluation</h4>
+                <p class="text-sm text-gray-600">Complete your Non-Classroom Observable Indicators</p>
+            </a>
+        </div>
+
+        
+        <div class="bg-white border border-gray-300 rounded-md p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Recent Notifications</h3>
+            
+       
+            <div id="notif-loading" class="hidden text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-depedBlue"></div>
+                <p class="text-sm text-textMuted mt-2">Loading notifications...</p>
+            </div>
+
+       
+            <div id="notif-empty" class="hidden text-center py-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                <p class="text-sm font-medium text-gray-500">You're all caught up!</p>
+                <p class="text-xs text-textMuted mt-1">No new notifications at this time.</p>
+            </div>
+            
+      
+            <div id="notification-list" class="space-y-3">
+                
+            </div>
+            
+            <div class="mt-4 text-center border-t border-gray-200 pt-4">
+                <a href="teacher-notifications.html" class="text-depedBlue text-sm font-medium hover:underline inline-flex items-center gap-1">
+                    View All Notifications
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+       
     </script>
-  </body>
+</body>
 </html>

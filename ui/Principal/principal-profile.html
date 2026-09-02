@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EvalPro - Principal Profile & Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              depedBlue: "#0033A0",
+              depedBg: "#F9F9F9",
+              textMuted: "#4B5563",
+            },
+            fontFamily: { sans: ["Inter", "sans-serif"] },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      .nav-btn.active {
+        background-color: #eff6ff;
+        color: #0033a0;
+        border-color: #bfdbfe;
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body class="bg-depedBg min-h-screen flex flex-col">
+    <!-- top nav bar -->
+    <nav
+      class="bg-depedBlue h-20 flex items-center justify-between px-10 shadow-md flex-shrink-0"
+    >
+      <div class="flex items-center gap-4">
+        <a
+          href="principal-dashboard.html"
+          class="text-white hover:text-blue-100 transition-colors p-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+        </a>
+        <div>
+          <h1 class="text-white text-3xl font-extrabold tracking-tight">
+            EvalPro
+          </h1>
+          <p class="text-blue-100 text-sm font-bold mt-[-4px]">
+            Principal Dashboard
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-6">
+        <!-- notif bell -->
+        <div class="relative">
+          <button
+            id="notification-btn"
+            class="relative p-2 text-white hover:bg-blue-800 rounded-full transition-colors duration-200"
+            aria-label="Notifications"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+            <span
+              id="notification-badge"
+              class="hidden absolute top-0 right-0 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full"
+              >0</span
+            >
+          </button>
+          <div
+            id="notification-dropdown"
+            class="hidden absolute right-0 mt-4 w-[400px] bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden"
+          >
+            <div
+              class="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50"
+            >
+              <h4 class="text-lg font-bold text-gray-900">Notifications</h4>
+              <button
+                id="close-dropdown-btn"
+                class="text-gray-400 hover:text-gray-600 transition-colors"
+                aria-label="Close notifications"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div id="dropdown-notif-list" class="text-center py-10">
+              <p class="text-sm text-textMuted">You're all caught up!</p>
+            </div>
+            <div
+              class="px-6 py-4 bg-gray-50 border-t border-gray-100 text-center"
+            >
+              <a
+                href="principal-notifications.html"
+                class="text-depedBlue font-semibold text-base hover:text-blue-800 transition-colors inline-flex items-center justify-center gap-2 group"
+                >View All Notifications<svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 5l7 7-7 7"
+                  /></svg
+              ></a>
+            </div>
+          </div>
+        </div>
+        <!-- profile dropdown -->
+        <div class="relative">
+          <button
+            id="profile-btn"
+            class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-gray-100 transition"
+            aria-label="Open Profile Menu"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-gray-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </button>
+          <div
+            id="profile-dropdown"
+            class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)] border border-gray-100 z-50 overflow-hidden"
+          >
+            <a
+              href="principal-profile.html"
+              class="flex items-center gap-3 px-5 py-3.5 text-gray-700 hover:bg-gray-50 transition-colors"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                /></svg
+              ><span class="font-semibold text-sm">Profile Settings</span></a
+            >
+            <div class="border-t border-gray-100"></div>
+            <form action="/api/auth/logout" method="POST">
+              <button
+                type="submit"
+                class="w-full flex items-center gap-3 px-5 py-3.5 text-red-600 hover:bg-red-50 transition-colors text-left"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  /></svg
+                ><span class="font-semibold text-sm">Sign Out</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- main content -->
+    <main class="flex-1 max-w-[1400px] mx-auto w-full px-10 py-10">
+      <header class="mb-8">
+        <h2 class="text-4xl font-bold text-gray-900">
+          Profile & Account Settings
+        </h2>
+        <p class="text-xl text-textMuted font-semibold mt-2">
+          Manage your personal information, security, and notification
+          preferences.
+        </p>
+      </header>
+
+      <!-- column layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- left side nav tabs -->
+        <aside class="lg:col-span-1">
+          <div
+            class="bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-4 space-y-2 sticky top-10"
+          >
+            <button
+              class="nav-btn active w-full text-left px-5 py-4 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-3 border border-transparent"
+              onclick="switchTab('profile', this)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+              Profile Information
+            </button>
+            <button
+              class="nav-btn w-full text-left px-5 py-4 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-3 border border-transparent"
+              onclick="switchTab('security', this)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+              Account & Security
+            </button>
+            <button
+              class="nav-btn w-full text-left px-5 py-4 rounded-xl font-semibold text-lg text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-3 border border-transparent"
+              onclick="switchTab('notifications', this)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+              </svg>
+              Notifications
+            </button>
+          </div>
+        </aside>
+
+        <!-- right area content -->
+        <div class="lg:col-span-3 space-y-8">
+          <!-- profile info -->
+          <div
+            id="profile"
+            class="tab-content active bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+              Personal Information
+            </h3>
+
+            <!-- profile picture upload still a shell -->
+            <div
+              class="flex items-center gap-6 mb-8 pb-8 border-b border-gray-100"
+            >
+              <div
+                class="w-24 h-24 rounded-full bg-depedBlue flex items-center justify-center text-white text-3xl font-extrabold shadow-md"
+                id="profile-initials"
+              >
+                --
+              </div>
+              <div>
+                <button
+                  type="button"
+                  class="bg-gray-100 text-gray-700 px-5 py-2 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm"
+                >
+                  Change Photo
+                </button>
+                <p class="text-sm text-textMuted mt-2">
+                  JPG, GIF or PNG. Max size of 2MB.
+                </p>
+              </div>
+            </div>
+
+            <!-- backend post  -->
+            <form
+              id="profile-form"
+              action="/api/principal/profile/update"
+              method="POST"
+              class="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              <div class="md:col-span-2">
+                <label
+                  for="profile-name"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  id="profile-name"
+                  name="full_name"
+                  value="--"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900 bg-gray-50"
+                  readonly
+                />
+              </div>
+              <div>
+                <label
+                  for="profile-position"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >Current Position</label
+                >
+                <input
+                  type="text"
+                  id="profile-position"
+                  name="position"
+                  value="--"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900 bg-gray-50"
+                  readonly
+                />
+              </div>
+              <div>
+                <label
+                  for="profile-school-id"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >School ID</label
+                >
+                <input
+                  type="text"
+                  id="profile-school-id"
+                  name="school_id"
+                  value="--"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900 bg-gray-50"
+                  readonly
+                />
+              </div>
+              <div>
+                <label
+                  for="profile-school"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >School Name</label
+                >
+                <input
+                  type="text"
+                  id="profile-school"
+                  name="school_name"
+                  value="--"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                />
+              </div>
+              <div>
+                <label
+                  for="profile-district"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >District</label
+                >
+                <input
+                  type="text"
+                  id="profile-district"
+                  name="district"
+                  value="--"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                />
+              </div>
+              <div>
+                <label
+                  for="profile-division"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >Division</label
+                >
+                <input
+                  type="text"
+                  id="profile-division"
+                  name="division"
+                  value="--"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                />
+              </div>
+              <div>
+                <label
+                  for="profile-email"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >Email Address</label
+                >
+                <input
+                  type="email"
+                  id="profile-email"
+                  name="email"
+                  value="--"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                />
+              </div>
+              <div>
+                <label
+                  for="profile-contact"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >Contact Number</label
+                >
+                <input
+                  type="tel"
+                  id="profile-contact"
+                  name="contact_number"
+                  value="--"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                />
+              </div>
+
+              <!-- error container -->
+              <div
+                id="profile-error"
+                class="hidden md:col-span-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm"
+              ></div>
+
+              <div
+                class="md:col-span-2 flex justify-end mt-8 pt-6 border-t border-gray-100"
+              >
+                <button
+                  type="submit"
+                  id="save-profile-btn"
+                  class="bg-depedBlue text-white px-8 py-3 rounded-xl font-bold text-lg hover:bg-blue-800 transition-colors shadow-md flex items-center gap-2"
+                >
+                  <span id="save-profile-text">Save Changes</span>
+                  <svg
+                    id="profile-spinner"
+                    class="hidden animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- account and security  -->
+          <div
+            id="security"
+            class="tab-content bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+              Change Password
+            </h3>
+
+            <!-- backend -->
+            <form
+              id="password-form"
+              action="/api/principal/password/update"
+              method="POST"
+              class="max-w-xl space-y-6"
+            >
+              <div>
+                <label
+                  for="current-pass"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >Current Password</label
+                >
+                <input
+                  type="password"
+                  id="current-pass"
+                  name="current_password"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                  placeholder="Enter current password"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="new-pass"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >New Password</label
+                >
+                <input
+                  type="password"
+                  id="new-pass"
+                  name="new_password"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                  placeholder="Enter new password"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  for="confirm-pass"
+                  class="block text-lg font-semibold text-gray-700 mb-2"
+                  >Confirm New Password</label
+                >
+                <input
+                  type="password"
+                  id="confirm-pass"
+                  name="confirm_password"
+                  class="w-full h-[60px] px-5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-depedBlue/20 focus:border-depedBlue outline-none transition-all text-lg text-gray-900"
+                  placeholder="Re-enter new password"
+                  required
+                />
+                <p
+                  id="pass-error"
+                  class="text-red-500 text-sm mt-2 hidden font-semibold"
+                >
+                  Passwords do not match.
+                </p>
+              </div>
+
+              <!-- error container -->
+              <div
+                id="password-error"
+                class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm"
+              ></div>
+
+              <div class="flex justify-end pt-4">
+                <button
+                  type="submit"
+                  id="update-password-btn"
+                  class="bg-depedBlue text-white px-8 py-3 rounded-xl font-bold text-lg hover:bg-blue-800 transition-colors shadow-md flex items-center gap-2"
+                >
+                  <span id="update-password-text">Update Password</span>
+                  <svg
+                    id="password-spinner"
+                    class="hidden animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </form>
+
+            <div class="mt-12 pt-8 border-t border-gray-100">
+              <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                Two-Factor Authentication (2FA)
+              </h3>
+              <div
+                class="flex items-center justify-between bg-gray-50 p-6 rounded-xl border border-gray-200"
+              >
+                <div>
+                  <p class="text-lg font-bold text-gray-900">
+                    Authenticator App
+                  </p>
+                  <p class="text-base text-textMuted mt-1">
+                    Add an extra layer of security to your account.
+                  </p>
+                </div>
+                <button
+                  class="bg-white border border-gray-300 text-gray-700 px-5 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                >
+                  Enable
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- notification -->
+          <div
+            id="notifications"
+            class="tab-content bg-white rounded-2xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-gray-100 p-8"
+          >
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+              Notification Preferences
+            </h3>
+
+            <!-- backend -->
+            <form
+              id="notification-prefs-form"
+              action="/api/principal/preferences/update"
+              method="POST"
+              class="space-y-6"
+            >
+              <!-- Toggle 1 -->
+              <div
+                class="flex items-center justify-between pb-6 border-b border-gray-100"
+              >
+                <div>
+                  <p class="text-lg font-bold text-gray-900">
+                    New Teacher Applications
+                  </p>
+                  <p class="text-base text-textMuted mt-1">
+                    Get notified when a teacher in your school submits an
+                    application.
+                  </p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="notify_applications"
+                    id="toggle-applications"
+                    checked
+                    class="sr-only peer"
+                  />
+                  <div
+                    class="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-7 after:w-7 after:transition-all peer-checked:bg-depedBlue"
+                  ></div>
+                </label>
+              </div>
+
+              <!-- toggle 2 -->
+              <div
+                class="flex items-center justify-between pb-6 border-b border-gray-100"
+              >
+                <div>
+                  <p class="text-lg font-bold text-gray-900">
+                    Application Returns & Remarks
+                  </p>
+                  <p class="text-base text-textMuted mt-1">
+                    Alert me immediately if AO II or HR returns an endorsed
+                    application.
+                  </p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="notify_returns"
+                    id="toggle-returns"
+                    checked
+                    class="sr-only peer"
+                  />
+                  <div
+                    class="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-7 after:w-7 after:transition-all peer-checked:bg-depedBlue"
+                  ></div>
+                </label>
+              </div>
+
+              <!-- toggle 3 -->
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-lg font-bold text-gray-900">
+                    System Alerts & Deadlines
+                  </p>
+                  <p class="text-base text-textMuted mt-1">
+                    Receive reminders for endorsement deadlines and division
+                    announcements.
+                  </p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="notify_system"
+                    id="toggle-system"
+                    checked
+                    class="sr-only peer"
+                  />
+                  <div
+                    class="w-14 h-8 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-7 after:w-7 after:transition-all peer-checked:bg-depedBlue"
+                  ></div>
+                </label>
+              </div>
+
+              <!-- error container -->
+              <div
+                id="prefs-error"
+                class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm"
+              ></div>
+
+              <div class="flex justify-end pt-6 border-t border-gray-100">
+                <button
+                  type="submit"
+                  id="save-prefs-btn"
+                  class="bg-depedBlue text-white px-8 py-3 rounded-xl font-bold text-lg hover:bg-blue-800 transition-colors shadow-md flex items-center gap-2"
+                >
+                  <span id="save-prefs-text">Save Preferences</span>
+                  <svg
+                    id="prefs-spinner"
+                    class="hidden animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- reusable modal -->
+    <div
+      id="action-modal"
+      class="hidden fixed w-full h-full top-0 left-0 items-center justify-center z-50"
+    >
+      <div
+        class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"
+        onclick="closeModal()"
+      ></div>
+      <div
+        class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded-2xl shadow-2xl z-50 overflow-y-auto relative"
+      >
+        <div class="modal-content py-4 text-left px-6">
+          <div class="flex justify-between items-center pb-3">
+            <p id="modal-title" class="text-2xl font-bold text-gray-900">
+              Title
+            </p>
+            <div class="modal-close cursor-pointer z-50" onclick="closeModal()">
+              <svg
+                class="fill-current text-gray-500 hover:text-gray-800"
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 18 18"
+              >
+                <path
+                  d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+          <p id="modal-body" class="text-lg text-textMuted mb-4">
+            Body text goes here.
+          </p>
+          <div class="flex justify-end pt-2">
+            <button
+              onclick="closeModal()"
+              class="px-6 py-3 bg-depedBlue text-white rounded-xl font-semibold text-lg hover:bg-blue-800 transition-colors shadow-md"
+            >
+              Okay
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- javascript -->
+    <script>
+      function switchTab(tabId, btnElement) {
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((content) => content.classList.remove("active"));
+        document.getElementById(tabId).classList.add("active");
+        document
+          .querySelectorAll(".nav-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        btnElement.classList.add("active");
+      }
+
+      const notifBtn = document.getElementById("notification-btn");
+      const notifDropdown = document.getElementById("notification-dropdown");
+      const closeDropdownBtn = document.getElementById("close-dropdown-btn");
+      if (notifBtn && notifDropdown) {
+        notifBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          notifDropdown.classList.toggle("hidden");
+        });
+        closeDropdownBtn.addEventListener("click", () => {
+          notifDropdown.classList.add("hidden");
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !notifDropdown.contains(e.target) &&
+            !notifBtn.contains(e.target)
+          ) {
+            notifDropdown.classList.add("hidden");
+          }
+        });
+      }
+
+      const profileBtn = document.getElementById("profile-btn");
+      const profileDropdown = document.getElementById("profile-dropdown");
+      if (profileBtn && profileDropdown) {
+        profileBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          profileDropdown.classList.toggle("hidden");
+        });
+        document.addEventListener("click", (e) => {
+          if (
+            !profileDropdown.contains(e.target) &&
+            !profileBtn.contains(e.target)
+          ) {
+            profileDropdown.classList.add("hidden");
+          }
+        });
+      }
+
+      function openModal(title, body) {
+        document.getElementById("modal-title").textContent = title;
+        document.getElementById("modal-body").textContent = body;
+        document.getElementById("action-modal").classList.remove("hidden");
+      }
+
+      function closeModal() {
+        document.getElementById("action-modal").classList.add("hidden");
+      }
+    </script>
+  </body>
+</html>
